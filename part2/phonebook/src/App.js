@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 
 const App = () => {
+  // eslint-disable-next-line
   const [persons, setPersons] = useState([{ name: "Arto Hellas" }]);
+  // eslint-disable-next-line
   const [newName, setNewName] = useState("");
 
   return (
