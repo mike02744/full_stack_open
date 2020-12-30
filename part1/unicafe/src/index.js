@@ -1,17 +1,10 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 
-const Button = ({ onClick, text }) => {
-  return <button onClick={onClick}>{text}</button>;
-};
-
 const App = () => {
   // save clicks of each button to own state
-  // eslint-disable-next-line
   const [good, setGood] = useState(0);
-  // eslint-disable-next-line
   const [neutral, setNeutral] = useState(0);
-  // eslint-disable-next-line
   const [bad, setBad] = useState(0);
 
   const handleClick = (value, setValue) => {
@@ -31,6 +24,11 @@ const App = () => {
     </div>
   );
 };
+
+const Button = ({ onClick, text }) => {
+  return <button onClick={onClick}>{text}</button>;
+};
+
 const Statistic = ({ text, value }) => {
   return (
     <tr>
