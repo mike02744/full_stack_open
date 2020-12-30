@@ -60,7 +60,7 @@ const Statistics = ({ good, neutral, bad }) => {
           <Statistic text="bad" value={bad} />
           <Statistic
             text="average"
-            value={((good * 1 - bad * 1) / (good + bad + neutral)).toFixed(2)}
+            value={((good - bad) / (good + bad + neutral)).toFixed(2)}
           />
           <Statistic
             text="positive"
