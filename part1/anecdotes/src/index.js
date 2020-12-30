@@ -3,8 +3,36 @@ import ReactDOM from "react-dom";
 
 const App = (props) => {
   const [selected, setSelected] = useState(0);
+  const [points, setPoints] = useState({ 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 });
+  const [best, setBest] = useState([0, 0]);
 
-  return <div>{props.anecdotes[selected]}</div>;
+  const handleNext = () => {
+    setSelected(Math.floor(Math.random() * 5));
+  };
+
+  const handleVote = () => {
+    const copy = { ...points };
+    copy[selected] = copy[selected] + 1;
+    setPoints(copy);
+
+    if (copy[selected] > best[1]) {
+      const temp = [selected, copy[selected]];
+      setBest(temp);
+    }
+  };
+
+  return (
+    <>
+      <h1>Anecdote of the day</h1>
+      <div>{props.anecdotes[selected]}</div>
+      <div>has {points[selected]} votes</div>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={handleNext}>next anecdote</button>
+      <h1>Anecdote with the most votes</h1>
+      <div>{props.anecdotes[best[0]]}</div>
+      <div>has {best[1]} votes</div>
+    </>
+  );
 };
 
 const anecdotes = [
