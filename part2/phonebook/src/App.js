@@ -56,7 +56,6 @@ const App = () => {
           text: `${newName} was added`,
           className: "notification",
         });
-
         setTimeout(() => {
           setMessage(null);
         }, 5000);
