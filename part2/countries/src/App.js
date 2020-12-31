@@ -3,7 +3,6 @@ import axios from "axios";
 import Countries from "./components/Countries";
 
 function App() {
-  // eslint-disable-next-line
   const [countries, setCountries] = useState([]);
   const [input, setInput] = useState("");
   const [selected, setSelected] = useState([]);

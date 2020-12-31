@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-
+import personsService from "./services/persons";
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [check, setCheck] = useState("");
-  const [names, setNames] = useState(
-    new Set(persons.map((person) => person.name))
-  );
 
   useEffect(() => {
-    // effect
-    const promise = axios.get("http://localhost:3001/persons");
-    promise.then((Response) => {
-      setPersons(Response.data);
-    });
+    personsService.getAll().then((response) => setPersons(response.data));
   }, []);
 
   const addPerson = (e) => {
@@ -24,24 +16,53 @@ const App = () => {
       name: newName,
       number: newNumber,
     };
-    if (names.has(newName)) {
-      window.alert(`${newName} is already added to phonebook`);
+    if (persons.filter((person) => person.name === newName).length > 0) {
+      if (
+        window.confirm(
+          `${newName} is already added to phonebook, replace the old number with new one?`
+        )
+      ) {
+        const id = persons.filter((person) => person.name === newName)[0].id;
+        personsService.update(id, personObject).then((response) => {
+          const temp = persons.map((person) =>
+            person.id !== id ? person : response.data
+          );
+          setPersons(temp);
+        });
+      }
+      // window.alert(`${newName} is already added to phonebook`);
     } else {
-      setPersons(persons.concat(personObject));
-      setNames(names.add(newName));
-      setNewName("");
-      setNewNumber("");
+      // setPersons(persons.concat(personObject));
+
+      personsService.create(personObject).then((response) => {
+        setPersons(persons.concat(response.data));
+
+        setNewName("");
+        setNewNumber("");
+      });
+    }
+  };
+
+  const remove = (id, name) => {
+    if (window.confirm(`Delete ${name}?`)) {
+      personsService
+        .remove(id)
+        .then(() => {
+          const temp = persons.filter((person) => person.id !== id);
+          setPersons(temp);
+        })
+        .catch((error) => {
+          window.alert("cant delete");
+        });
     }
   };
 
   const handleNameChange = (e) => {
     setNewName(e.target.value);
   };
-
   const handleNumberChange = (e) => {
     setNewNumber(e.target.value);
   };
-
   const handleCheckChange = (e) => {
     setCheck(e.target.value);
   };
@@ -63,7 +84,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} remove={remove} />
     </div>
   );
 };
@@ -94,13 +115,13 @@ const PersonForm = (props) => {
   );
 };
 
-const Persons = ({ persons }) => {
-  let i = 0;
+const Persons = ({ persons, remove }) => {
   return (
     <ul>
       {persons.map((person) => (
-        <li key={++i}>
-          {person.name} {person.number}
+        <li key={person.id}>
+          {person.name} {person.number}{" "}
+          <button onClick={() => remove(person.id, person.name)}>delete</button>
         </li>
       ))}
     </ul>
