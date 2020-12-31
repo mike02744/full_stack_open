@@ -17,7 +17,7 @@ const Country = ({ country }) => {
       `https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&appid=${api_key}&units=metric`
     );
     promise.then((Response) => setWeather(Response.data));
-  }, [country.capital]);
+  }, [country]);
 
   return (
     <>
@@ -30,9 +30,9 @@ const Country = ({ country }) => {
       </p>
       <h2>Language</h2>
       <ul>
-        {country.languages.map((language) => (
-          <li key={language.iso639_1}>{language.name}</li>
-        ))}
+        {country.languages.map(function (language) {
+          return <li key={language.iso639_2.toString()}>{language.name}</li>;
+        })}
       </ul>
       <img src={country.flag} alt={`${country.name} Flag`} width="200" />
       <h2>Weather in {country.capital}</h2>
@@ -43,6 +43,7 @@ const Country = ({ country }) => {
       {weather.weather.map((w) => {
         return (
           <img
+            key={w.id}
             src={`http://openweathermap.org/img/wn/${w.icon}@2x.png`}
             alt="icon/"
           />
