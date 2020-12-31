@@ -36,7 +36,11 @@ function App() {
     <div>
       Find countries:
       <input value={input} onChange={handleInput} />
-      <Countries countries={countriesToShow} handleSelect={handleSelect} />
+      <Countries
+        countries={countriesToShow}
+        handleSelect={handleSelect}
+        input={input}
+      />
     </div>
   );
 }

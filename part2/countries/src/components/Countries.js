@@ -1,7 +1,9 @@
 import React from "react";
 import Country from "./Country";
-const Countries = ({ countries, handleSelect }) => {
-  if (countries.length === 1) {
+const Countries = ({ countries, handleSelect, input }) => {
+  if (input.length === 0) {
+    return <></>;
+  } else if (countries.length === 1) {
     return <Country country={countries[0]} />;
   } else if (countries.length <= 10) {
     return (
