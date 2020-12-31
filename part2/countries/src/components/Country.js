@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const Country = ({ country }) => {
-  // console.log(country.flag);
   const [weather, setWeather] = useState({
     main: { temp: "" },
     weather: [],
@@ -11,32 +10,17 @@ const Country = ({ country }) => {
       deg: 0,
     },
   });
-  // const [icon, setIcon] = useState("");
+
   useEffect(() => {
     const api_key = process.env.REACT_APP_API_KEY;
-    axios
-      .get(
-        `https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&appid=${api_key}&units=metric`
-      )
-      .then((Response) => setWeather(Response.data));
-
-    // console.log(weather);
-    // return () => {
-    //   cleanup
-    // }
+    const promise = axios.get(
+      `https://api.openweathermap.org/data/2.5/weather?q=${country.capital}&appid=${api_key}&units=metric`
+    );
+    promise.then((Response) => setWeather(Response.data));
   }, [country.capital]);
-
-  // useEffect(() => {
-  //   setIcon(weather.weather.icon);
-  //   // console.log(weather);
-  //   // return () => {
-  //   //   cleanup
-  //   // }
-  // }, [weather]);
 
   return (
     <>
-      {/* <div>weather : {weather}</div> */}
       <h1>{country.name}</h1>
       <p>
         <b>Capital:</b> {country.capital}

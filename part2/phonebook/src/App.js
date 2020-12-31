@@ -12,7 +12,8 @@ const App = () => {
 
   useEffect(() => {
     // effect
-    axios.get("http://localhost:3001/persons").then((Response) => {
+    const promise = axios.get("http://localhost:3001/persons");
+    promise.then((Response) => {
       setPersons(Response.data);
     });
   }, []);
