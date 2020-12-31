@@ -5,7 +5,7 @@ const App = () => {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [check, setCheck] = useState("");
-
+  const [message, setMessage] = useState(null);
   useEffect(() => {
     personsService.getAll().then((response) => setPersons(response.data));
   }, []);
@@ -23,22 +23,43 @@ const App = () => {
         )
       ) {
         const id = persons.filter((person) => person.name === newName)[0].id;
-        personsService.update(id, personObject).then((response) => {
-          const temp = persons.map((person) =>
-            person.id !== id ? person : response.data
-          );
-          setPersons(temp);
-        });
+        personsService
+          .update(id, personObject)
+          .then((response) => {
+            const temp = persons.map((person) =>
+              person.id !== id ? person : response.data
+            );
+            setPersons(temp);
+            setMessage({
+              text: `${newName} was modified`,
+              className: "notification",
+            });
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+          })
+          .catch(() => {
+            setMessage({
+              text: `${newName} was removed from server`,
+              className: "error",
+            });
+            const temp = persons.filter((person) => person.id !== id);
+            setPersons(temp);
+          });
       }
-      // window.alert(`${newName} is already added to phonebook`);
     } else {
-      // setPersons(persons.concat(personObject));
-
       personsService.create(personObject).then((response) => {
         setPersons(persons.concat(response.data));
-
         setNewName("");
         setNewNumber("");
+        setMessage({
+          text: `${newName} was added`,
+          className: "notification",
+        });
+
+        setTimeout(() => {
+          setMessage(null);
+        }, 5000);
       });
     }
   };
@@ -52,7 +73,15 @@ const App = () => {
           setPersons(temp);
         })
         .catch((error) => {
-          window.alert("cant delete");
+          setMessage({
+            text: `${name} was already removed from server`,
+            className: "error",
+          });
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+          const temp = persons.filter((person) => person.id !== id);
+          setPersons(temp);
         });
     }
   };
@@ -74,6 +103,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter check={check} handleCheckChange={handleCheckChange} />
       <h2>add a new</h2>
       <PersonForm
@@ -87,6 +117,13 @@ const App = () => {
       <Persons persons={personsToShow} remove={remove} />
     </div>
   );
+};
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null;
+  }
+  return <div className={message.className}>{message.text}</div>;
 };
 
 const Filter = (props) => {
