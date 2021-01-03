@@ -22,13 +22,16 @@ const App = () => {
           `${newName} is already added to phonebook, replace the old number with new one?`
         )
       ) {
-        const id = persons.filter((person) => person.name === newName)[0].id;
+        const id = persons.find((person) => person.name === newName).id;
         personsService
           .update(id, personObject)
           .then((response) => {
             const temp = persons.map((person) =>
               person.id !== id ? person : response.data
             );
+            setNewName("");
+            setNewNumber("");
+
             setPersons(temp);
             setMessage({
               text: `${newName} was modified`,
@@ -38,7 +41,8 @@ const App = () => {
               setMessage(null);
             }, 5000);
           })
-          .catch(() => {
+          .catch((error) => {
+            console.log(error.response.data);
             setMessage({
               text: `${newName} was removed from server`,
               className: "error",
@@ -48,18 +52,30 @@ const App = () => {
           });
       }
     } else {
-      personsService.create(personObject).then((response) => {
-        setPersons(persons.concat(response.data));
-        setNewName("");
-        setNewNumber("");
-        setMessage({
-          text: `${newName} was added`,
-          className: "notification",
+      personsService
+        .create(personObject)
+        .then((response) => {
+          setPersons(persons.concat(response.data));
+          setNewName("");
+          setNewNumber("");
+          setMessage({
+            text: `${newName} was added`,
+            className: "notification",
+          });
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+          setMessage({
+            text: error.response.data.error,
+            className: "error",
+          });
+          setTimeout(() => {
+            setMessage(null);
+          }, 5000);
         });
-        setTimeout(() => {
-          setMessage(null);
-        }, 5000);
-      });
     }
   };
 
