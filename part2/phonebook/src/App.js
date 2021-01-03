@@ -44,11 +44,12 @@ const App = () => {
           .catch((error) => {
             console.log(error.response.data);
             setMessage({
-              text: `${newName} was removed from server`,
+              // text: `${newName} was removed from server`,
+              text: error.response.data.error,
               className: "error",
             });
-            const temp = persons.filter((person) => person.id !== id);
-            setPersons(temp);
+            // const temp = persons.filter((person) => person.id !== id);
+            // setPersons(temp);
           });
       }
     } else {
@@ -87,7 +88,7 @@ const App = () => {
           const temp = persons.filter((person) => person.id !== id);
           setPersons(temp);
         })
-        .catch((error) => {
+        .catch(() => {
           setMessage({
             text: `${name} was already removed from server`,
             className: "error",
