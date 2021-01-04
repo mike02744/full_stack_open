@@ -34,7 +34,7 @@ const favoriteBlog = (blogs)=>{
 }
 
 const mostLikes = (blogs)=>{
-    const result = 
+    const resultArr = 
     _.reduce(blogs, (result, blog, key) => {
             // console.log(blog, result);
             const person = _.find(result, { author: blog.author });
@@ -48,13 +48,12 @@ const mostLikes = (blogs)=>{
             }
             return result;
         },[])
-console.log(_.maxBy(result, e=>( e.likes)));
-
-    return _.maxBy(result, e=>( e.likes))
+// console.log(_.maxBy(resultArr, e=>( e.likes)));
+    return _.maxBy(resultArr, e=>( e.likes))
  }
  
 const mostBlogs = (blogs)=>{
-   const result = 
+   const resultArr = 
    _.reduce(blogs, (result, blog, key) => {
         //    console.log(blog, result);
            const person = _.find(result, { author: blog.author });
@@ -68,7 +67,7 @@ const mostBlogs = (blogs)=>{
            }
            return result;
        },[])
-   return _.maxBy(result, e=>( e.blogs))
+   return _.maxBy(resultArr, e=>( e.blogs))
 }
 
 module.exports = {
