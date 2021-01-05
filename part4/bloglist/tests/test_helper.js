@@ -64,11 +64,11 @@ const oneBlog = {
 };
 
 const oneBlogWithoutLikes = {
-  _id: "5a422aa71b54a676234d1701",
+  // _id: "5a422aa71b54a676234d1701",
   title: "Go To Statement Considered Harmful",
   author: "Edsger W. Dijkstra",
   url: "http://www.u.arizona.edu/~rubinson/copyright_violations.html",
-  __v: 0,
+  // __v: 0,
 };
 
 const oneFaultyBlog = {
@@ -84,10 +84,19 @@ const blogsInDb = async () => {
   return blogs.map((blog) => blog.toJSON());
 };
 
+const existingId = async () => {
+  const blog = new Blog(oneBlog);
+  await blog.save();
+  // await note.remove()
+
+  return blog.id.toString();
+};
+
 module.exports = {
   initialBlogs,
   oneBlog,
   blogsInDb,
   oneBlogWithoutLikes,
   oneFaultyBlog,
+  existingId,
 };

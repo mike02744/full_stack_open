@@ -13,61 +13,109 @@ beforeEach(async () => {
   await Promise.all(promiseArray);
 });
 
-test("a blog cant be added without title and url", async () => {
-  await api.post("/api/blogs").send(helper.oneFaultyBlog).expect(400);
+describe("when there is initially some blogs saved", () => {
+  test("blogs are returned as json", async () => {
+    await api
+      .get("/api/blogs")
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+  });
 
-  const response = await api.get("/api/blogs");
+  test("all blogs are returned", async () => {
+    const response = await api.get("/api/blogs");
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length);
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
+  });
+
+  test("a specific blog is within the returned notes", async () => {
+    const response = await api.get("/api/blogs");
+    // console.log(response.body);
+    const authors = response.body.map((blog) => blog.author);
+    expect(authors).toContain("Michael Chan");
+  });
+
+  test("all blogs have unique 'id' ", async () => {
+    const response = await api.get("/api/blogs");
+    response.body.map((blog) => expect(blog.id).toBeDefined());
+  });
 });
 
-test("a blog added with no likes", async () => {
-  const response = await api
-    .post("/api/blogs")
-    .send(helper.oneBlogWithoutLikes)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+describe("addition of a new blog", () => {
+  test("a blog added with no likes", async () => {
+    const response = await api
+      .post("/api/blogs")
+      .send(helper.oneBlogWithoutLikes)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
 
-  const blogsAtEnd = await helper.blogsInDb();
-  const blog = blogsAtEnd.find((blog) => blog.id === response.body.id);
-  expect(blog.likes).toEqual(0);
+    const blogsAtEnd = await helper.blogsInDb();
+    const blog = blogsAtEnd.find((blog) => blog.id === response.body.id);
+    expect(blog.likes).toEqual(0);
+  });
+
+  test("a valid blog can be added", async () => {
+    await api
+      .post("/api/blogs")
+      .send(helper.oneBlog)
+      .expect(200)
+      .expect("Content-Type", /application\/json/);
+
+    const blogsAtEnd = await helper.blogsInDb();
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
+  });
+
+  test("a blog cant be added without title and url", async () => {
+    await api.post("/api/blogs").send(helper.oneFaultyBlog).expect(400);
+
+    const response = await api.get("/api/blogs");
+
+    expect(response.body).toHaveLength(helper.initialBlogs.length);
+  });
 });
 
-test("a valid blog can be added", async () => {
-  await api
-    .post("/api/blogs")
-    .send(helper.oneBlog)
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
+describe("delete of a blog",()=>{
+  test("a blog is deleted with proper id",async ()=>{
+   const blogsAtBeginning = await helper.blogsInDb()
+   const blogToDelete = blogsAtBeginning[0]
 
-  const blogsAtEnd = await helper.blogsInDb();
-  expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1);
-});
+       await api.delete(`/api/blogs/${blogToDelete.id}`)
+    .expect(204)
 
-test("all blogs have unique 'id' ", async () => {
-  const response = await api.get("/api/blogs");
-  response.body.map((blog) => expect(blog.id).toBeDefined());
-});
+   const blogsAtEnd = await helper.blogsInDb()
 
-test("all blogs are returned", async () => {
-  const response = await api.get("/api/blogs");
+   expect(blogsAtEnd.length).toBe(blogsAtBeginning.length-1)
+   expect(blogsAtBeginning).toContainEqual(blogToDelete)
+   expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+  })
+  
+})
+describe("update of a blog",()=>{
+  test("a blog is updated with proper id",async ()=>{
+   const blogsAtBeginning = await helper.blogsInDb()
+    
+   const blogToUpdate = blogsAtBeginning[0]
+    
+    // console.log("old", );
 
-  expect(response.body).toHaveLength(helper.initialBlogs.length);
-});
+   const respond =  await api.put(`/api/blogs/${blogToUpdate.id}`).send(helper.oneBlogWithoutLikes)
 
-test("a specific blog is within the returned notes", async () => {
-  const response = await api.get("/api/blogs");
-  // console.log(response.body);
-  const authors = response.body.map((blog) => blog.author);
-  expect(authors).toContain("Michael Chan");
-});
+   const blogUpdated = respond.body
+    
 
-test("blogs are returned as json", async () => {
-  await api
-    .get("/api/blogs")
-    .expect(200)
-    .expect("Content-Type", /application\/json/);
-});
+    const blogsAtEnd = await helper.blogsInDb()
+
+    expect(blogsAtEnd.length).toBe(blogsAtBeginning.length)
+
+    expect(blogsAtBeginning).toContainEqual(blogToUpdate)
+    expect(blogsAtBeginning).not.toContainEqual(blogUpdated)
+
+    expect(blogsAtEnd).not.toContainEqual(blogToUpdate)
+    expect(blogsAtEnd).toContainEqual(blogUpdated)
+
+  })
+
+
+})
 
 afterAll(() => {
   mongoose.connection.close();
