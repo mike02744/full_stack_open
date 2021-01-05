@@ -1,4 +1,4 @@
-const e = require("cors");
+// const e = require("cors");
 const _ = require("lodash")
 
 const dummy = (blogs) => {
