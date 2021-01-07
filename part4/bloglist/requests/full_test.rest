@@ -13,11 +13,26 @@ POST http://localhost:3003/api/blogs HTTP/1.1
 Content-Type: application/json
 
 {
-    "title":"title2",
-    "author": "author2",
-    "url": "links2",
-    "likes": 90
+    "title":"title1",
+    "author": "author1",
+    "url": "linkes2",
+    "likes": 4,"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRpbTMxMjYyIiwiaWQiOiI1ZmY2ZjFiNTc2YjI0MTBmMWJjMjViNGIiLCJpYXQiOjE2MTAwMjIzNTF9.mkfPu3fp3XQPNu75ceNHPghJnshky3BcMhhVmu8NgnY"
+    
 }
+###
+POST http://localhost:3003/api/blogs HTTP/1.1
+Content-Type: application/json
+
+{
+    "title":"titl43e2",
+    "author": "auth3or2",
+    "url": "lin43ks2",
+    "likes": 90,
+     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRpbTMxMjYyIiwiaWQiOiI1ZmY2ZjFiNTc2YjI0MTBmMWJjMjViNGIiLCJpYXQiOjE2MTAwMjIzNTF9.mkfPu3fp3XQPNu75ceNHPghJnshky3BcMhhVmu8NgnY"
+}
+
+###
+
 
 ###
 GET http://localhost:3003/api/blogs
