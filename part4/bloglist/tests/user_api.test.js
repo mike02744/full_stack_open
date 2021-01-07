@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 const supertest = require("supertest");
 const helper = require("./user_helper");
-const blogHelper = require("./test_helper");
 
 const Blog = require("../models/blog");
 const User = require("../models/user");
 const app = require("../app");
-// const { response } = require("express");
 const api = supertest(app);
 
 beforeEach(async () => {

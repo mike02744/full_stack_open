@@ -54,21 +54,21 @@ const initialBlogs = [
   },
 ];
 const oneBlog = {
-  // _id: "5a422aa71b54a676234d1700",
+  _id: "5a422aa71b54a676234d1700",
   title: "Go To Statement Considered Harmful",
   author: "Edsger W. Dijkstra",
   url:
     "http://www.u.arizona.edu/~rubinson/copyright_violations/Go_To_Considered_Harmful.html",
   likes: 5,
-  // __v: 0,
+  __v: 0,
 };
 
 const oneBlogWithoutLikes = {
-  // _id: "5a422aa71b54a676234d1701",
+  _id: "5a422aa71b54a676234d1701",
   title: "Go To Statement Considered Harmful",
   author: "Edsger W. Dijkstra",
   url: "http://www.u.arizona.edu/~rubinson/copyright_violations.html",
-  // __v: 0,
+  __v: 0,
 };
 
 const oneFaultyBlog = {

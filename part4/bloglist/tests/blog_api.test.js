@@ -6,9 +6,6 @@ const userHelper = require("./user_helper");
 const app = require("../app");
 const Blog = require("../models/blog");
 const User = require("../models/user");
-const { response } = require("express");
-
-// const { response } = require("express");
 const api = supertest(app);
 
 beforeEach(async () => {
