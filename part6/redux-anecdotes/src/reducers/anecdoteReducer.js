@@ -35,25 +35,23 @@ const reducer = (state = initialState, action) => {
       );
     }
     case "NEW_ANECDOTE": {
-      return [...state, action.data]
+      return [...state, action.data];
     }
     default:
       return state;
   }
 };
 
-export const createAnecdote = (content)=>{
+export const createAnecdote = (content) => {
   return {
     type: "NEW_ANECDOTE",
-    data:{
+    data: {
       content,
       id: getId(),
-    votes: 0,
-
-
-    }
-  }
-}
+      votes: 0,
+    },
+  };
+};
 
 export const upvote = (id) => {
   return {
