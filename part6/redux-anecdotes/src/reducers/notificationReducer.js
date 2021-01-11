@@ -14,18 +14,19 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-export const notice = (content) => {
-  return {
-    type: "NOTICE",
-    data: {
-      content,
-    },
-  };
-};
-
-export const clear = () => {
-  return {
-    type: "CLEAR",
+export const setNotice = (content, time) => {
+  return (dispatch) => {
+    dispatch({
+      type: "NOTICE",
+      data: {
+        content,
+      },
+    });
+    setTimeout(() => {
+      dispatch({
+        type: "CLEAR",
+      });
+    }, time * 1000);
   };
 };
 

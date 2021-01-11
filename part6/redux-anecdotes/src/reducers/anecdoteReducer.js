@@ -1,4 +1,6 @@
-const initialState = []
+import anecdotesService from "../services/anecdotes";
+
+const initialState = [];
 
 const reducer = (state = initialState, action) => {
   console.log("state now: ", state);
@@ -19,32 +21,41 @@ const reducer = (state = initialState, action) => {
       return [...state, action.anecdote];
     }
     case "INIT_ANECDOTES": {
-      return  action.data;
+      return action.data;
     }
     default:
       return state;
   }
 };
-export const initializeAnecdote = (anecdotes) => {
-  return {
-    type: "INIT_ANECDOTES",
-    data: anecdotes,
+
+export const initializeAnecdote = () => {
+  return async (dispatch) => {
+    const anecdotes = await anecdotesService.getAll();
+    dispatch({
+      type: "INIT_ANECDOTES",
+      data: anecdotes,
+    });
+  };
+};
+export const createAnecdote = (content) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdotesService.createNew(content);
+    dispatch({
+      type: "NEW_ANECDOTE",
+      anecdote: newAnecdote,
+    });
   };
 };
 
-export const createAnecdote = (anecdote) => {
-  return {
-    type: "NEW_ANECDOTE",
-    anecdote,
-  };
-};
-
-export const upvote = (id) => {
-  return {
-    type: "UPVOTE",
-    data: {
-      id,
-    },
+export const upvote = (anecdote) => {
+  return async (dispatch) => {
+    const newAnecdote = await anecdotesService.upvoteAnecdote(anecdote);
+    dispatch({
+      type: "UPVOTE",
+      data: {
+        id: newAnecdote.id,
+      },
+    });
   };
 };
 
