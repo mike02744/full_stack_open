@@ -106,13 +106,10 @@ const App = () => {
           {user.username} Logged in
           <button onClick={handleLogout}>logout</button>
         </p>
-        {/* {user === null && loginForm()} */}
         {blogForm()}
-        {
-          /*user !== null &&**/ blogs.map((blog) => (
-            <Blog key={blog.id} blog={blog} />
-          ))
-        }
+        {blogs.map((blog) => (
+          <Blog key={blog.id} blog={blog} />
+        ))}
       </div>
     );
   }
